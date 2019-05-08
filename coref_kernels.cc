@@ -1,6 +1,6 @@
 #include <map>
 
-#include "/tensorflow/core/framework/shape_inference.h"
+#include "/core/framework/shape_inference.h"
 #include "tensorflow/core/framework/op_kernel.h"
 
 using namespace tensorflow;
