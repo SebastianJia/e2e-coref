@@ -76,8 +76,6 @@ class DocumentState(object):
       "doc_key": self.doc_key,
       "sentences": self.sentences,
       "speakers": self.speakers,
-      "constituents": self.span_dict_to_list(self.constituents),
-      "ner": self.span_dict_to_list(self.ner),
       "clusters": merged_clusters
     }
 
