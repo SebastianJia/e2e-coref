@@ -129,8 +129,6 @@ def handle_line(line, document_state, language, labels, stats):
     finalized_state = document_state.finalize()
     stats["num_clusters"] += len(finalized_state["clusters"])
     stats["num_mentions"] += sum(len(c) for c in finalized_state["clusters"])
-    labels["{}_const_labels".format(language)].update(l for _, _, l in finalized_state["constituents"])
-    labels["ner"].update(l for _, _, l in finalized_state["ner"])
     return finalized_state
   else:
     row = line.split()
