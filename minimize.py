@@ -33,7 +33,6 @@ class DocumentState(object):
     assert len(self.text_speakers) == 0
     assert len(self.speakers) == 0
     assert len(self.sentences) == 0
-    assert len(self.constituents) == 0
     assert len(self.const_stack) == 0
     assert len(self.ner) == 0
     assert len(self.ner_stack) == 0
@@ -46,7 +45,6 @@ class DocumentState(object):
     assert len(self.text_speakers) == 0
     assert len(self.speakers) > 0
     assert len(self.sentences) > 0
-    assert len(self.constituents) > 0
     assert len(self.const_stack) == 0
     assert len(self.ner_stack) == 0
     assert all(len(s) == 0 for s in self.coref_stacks.values())
