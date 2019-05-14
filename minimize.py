@@ -159,8 +159,6 @@ def handle_line(line, document_state, language, labels, stats):
     document_state.text.append(word)
     document_state.text_speakers.append(speaker)
 
-    handle_bit(word_index, parse, document_state.const_stack, document_state.constituents)
-    handle_bit(word_index, ner, document_state.ner_stack, document_state.ner)
 
     if coref != "-":
       for segment in coref.split("|"):
