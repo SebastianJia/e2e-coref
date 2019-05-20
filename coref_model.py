@@ -149,6 +149,8 @@ class CorefModel(object):
         head_word_emb[i, j] = self.head_embeddings[word]
         char_index[i, j, :len(word)] = [self.char_dict[c] for c in word]
     tokens = np.array(tokens)
+    print(context_word_emb[0][0].shape)
+    print(head_word_emb[0,0].shape)
 
     speaker_dict = { s:i for i,s in enumerate(set(speakers)) }
     speaker_ids = np.array([speaker_dict[s] for s in speakers])
@@ -159,7 +161,7 @@ class CorefModel(object):
     gold_starts, gold_ends = self.tensorize_mentions(gold_mentions)
 
     lm_emb = self.load_lm_embeddings(doc_key)
-
+    print(lm_emb.shape)
     example_tensors = (tokens, context_word_emb, head_word_emb, lm_emb, char_index, text_len, speaker_ids, genre, is_training, gold_starts, gold_ends, cluster_ids)
 
     if is_training and len(sentences) > self.config["max_training_sentences"]:
