@@ -32,8 +32,6 @@ function compile_language() {
 }
 
 compile_language english
-compile_language chinese
-compile_language arabic
 
 python minimize.py
 python get_char_vocab.py
