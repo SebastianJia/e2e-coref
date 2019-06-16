@@ -40,7 +40,6 @@ if __name__ == "__main__":
           if example_num % 100 == 0:
             print("Decoded {} examples.".format(example_num + 1))
   summary_dict = {}
-  model.config["conll_eval_path"] = "dev.english.v4_gold_conll"
   conll_results = conll.evaluate_conll(model.config["conll_eval_path"], coref_predictions, False)
   average_f1 = sum(results["f"] for results in conll_results.values()) / len(conll_results)
   summary_dict["Average F1 (conll)"] = average_f1
