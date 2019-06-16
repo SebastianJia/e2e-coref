@@ -4,7 +4,7 @@ from __future__ import print_function
 
 import sys
 import json
-
+import metrics
 import tensorflow as tf
 import coref_model as cm
 import util
@@ -17,9 +17,10 @@ if __name__ == "__main__":
 
   # Predictions will be written to this file in .jsonlines format.
   output_filename = sys.argv[3]
-
+  coref_predictions = {}
+  coref_evaluator = metrics.CorefEvaluator()
   model = cm.CorefModel(config)
-
+  model.config["conll_eval_path"] = sys.argv[4]
   with tf.Session() as session:
     model.restore(session)
 
@@ -32,8 +33,22 @@ if __name__ == "__main__":
           _, _, _, top_span_starts, top_span_ends, top_antecedents, top_antecedent_scores = session.run(model.predictions, feed_dict=feed_dict)
           predicted_antecedents = model.get_predicted_antecedents(top_antecedents, top_antecedent_scores)
           example["predicted_clusters"], _ = model.get_predicted_clusters(top_span_starts, top_span_ends, predicted_antecedents)
+          coref_predictions[example["doc_key"]] = model.evaluate_coref(top_span_starts, top_span_ends, predicted_antecedents, example["clusters"], coref_evaluator)
 
           output_file.write(json.dumps(example))
           output_file.write("\n")
           if example_num % 100 == 0:
             print("Decoded {} examples.".format(example_num + 1))
+  summary_dict = {}
+  model.config["conll_eval_path"] = "dev.english.v4_gold_conll"
+  conll_results = conll.evaluate_conll(model.config["conll_eval_path"], coref_predictions, False)
+  average_f1 = sum(results["f"] for results in conll_results.values()) / len(conll_results)
+  summary_dict["Average F1 (conll)"] = average_f1
+  print("Average F1 (conll): {:.2f}%".format(average_f1))
+  p,r,f = coref_evaluator.get_prf()
+  summary_dict["Average F1 (py)"] = f
+  print("Average F1 (py): {:.2f}%".format(f * 100))
+  summary_dict["Average precision (py)"] = p
+  print("Average precision (py): {:.2f}%".format(p * 100))
+  summary_dict["Average recall (py)"] = r
+  print("Average recall (py): {:.2f}%".format(r * 100))
