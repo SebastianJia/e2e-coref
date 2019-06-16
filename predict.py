@@ -5,6 +5,7 @@ from __future__ import print_function
 import sys
 import json
 import metrics
+import conll
 import tensorflow as tf
 import coref_model as cm
 import util
